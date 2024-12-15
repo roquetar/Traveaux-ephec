@@ -11,6 +11,10 @@ class FractionTestCase(unittest.TestCase):
         self.assertEqual(f.numerator, 3, "Numerator should be 3")
         self.assertEqual(f.denominator, 4, "Denominator should be 4")
 
+    def test_initialization_error(self):
+        with self.assertRaises(Exception, msg="Denominator cannot be zero"):
+            Fraction(3, 0)
+
     def test_str(self):
         """Test string representation of a fraction."""
         f = Fraction(2, 4)
@@ -29,6 +33,16 @@ class FractionTestCase(unittest.TestCase):
         self.assertEqual(result.numerator, 5, "Numerator should be 5 after addition")
         self.assertEqual(result.denominator, 6, "Denominator should be 6 after addition")
 
+    def test_addition_int(self):
+        f1 = Fraction(1, 2)
+        result = f1 + 2
+        self.assertEqual(result.numerator, 5, "Numerator should be 3 after addition")
+        self.assertEqual(result.denominator, 2, "Denominator should be 2 after addition")
+
+    def test_addition_error(self):
+        with self.assertRaises(TypeError, msg="Addition requires a Fraction"):
+            Fraction(1, 2) + "1"
+
     def test_subtraction(self):
         """Test subtraction of two fractions."""
         f1 = Fraction(2, 3)
@@ -36,6 +50,17 @@ class FractionTestCase(unittest.TestCase):
         result = f1 - f2
         self.assertEqual(result.numerator, 1, "Numerator should be 1 after subtraction")
         self.assertEqual(result.denominator, 3, "Denominator should be 3 after subtraction")
+
+    def test_subtraction_int(self):
+        """Test subtraction of two fractions."""
+        f1 = Fraction(2, 3)
+        result = f1 - 2
+        self.assertEqual(result.numerator, -4, "Numerator should be 1 after subtraction")
+        self.assertEqual(result.denominator, 3, "Denominator should be 3 after subtraction")
+
+    def test_subtraction_error(self):
+        with self.assertRaises(TypeError, msg="Subtraction requires a Fraction"):
+            Fraction(2, 3) - "2"
 
     def test_multiplication(self):
         """Test multiplication of two fractions."""
@@ -45,6 +70,17 @@ class FractionTestCase(unittest.TestCase):
         self.assertEqual(result.numerator, 3, "Numerator should be 6 after multiplication")
         self.assertEqual(result.denominator, 10, "Denominator should be 20 after multiplication")
 
+    def test_multiplication_int(self):
+        """Test multiplication of two fractions."""
+        f1 = Fraction(3, 4)
+        result = f1 * 2
+        self.assertEqual(result.numerator, 3, "Numerator should be 6 after multiplication")
+        self.assertEqual(result.denominator, 2, "Denominator should be 20 after multiplication")
+
+    def test_multiplication_error(self):
+        with self.assertRaises(TypeError, msg="Multiplication requires a Fraction"):
+            Fraction(3, 4) * "2"
+
     def test_division(self):
         """Test division of two fractions."""
         f1 = Fraction(3, 4)
@@ -53,6 +89,10 @@ class FractionTestCase(unittest.TestCase):
         self.assertEqual(result.numerator, 15, "Numerator should be 15 after division")
         self.assertEqual(result.denominator, 8, "Denominator should be 8 after division")
 
+    def test_division_error(self):
+        with self.assertRaises(ZeroDivisionError, msg="Division by zero"):
+            Fraction(3, 4) / Fraction(0, 1)
+
     def test_power(self):
         """Test exponentiation of a fraction."""
         f = Fraction(2, 3)
@@ -60,11 +100,19 @@ class FractionTestCase(unittest.TestCase):
         self.assertEqual(result.numerator, 4, "Numerator should be 4 after exponentiation")
         self.assertEqual(result.denominator, 9, "Denominator should be 9 after exponentiation")
 
+    def test_power_error(self):
+        with self.assertRaises(TypeError, msg="Exponentiation requires an integer"):
+            Fraction(2, 3) ** Fraction(1, 2)
+
     def test_equality(self):
         """Test equality of two fractions."""
         f1 = Fraction(2, 3)
         f2 = Fraction(4, 6)
         self.assertTrue(f1 == f2, "Fractions should be equal")
+
+    def test_equality_error(self):
+        with self.assertRaises(AttributeError, msg="Equality requires a Fraction"):
+            Fraction(2, 3) == 1
 
     def test_inequality(self):
         """Test inequality of two fractions."""
@@ -143,6 +191,10 @@ class FractionTestCase(unittest.TestCase):
         f.simplify()
         self.assertEqual(f.numerator, 1, "Numerator should be 1 after simplification")
         self.assertEqual(f.denominator, 2, "Denominator should be 2 after simplification")
+
+    def test_simplify_error(self):
+        with self.assertRaises(ValueError, msg="Cannot simplify zero denominator"):
+            Fraction(0, 0).simplify()
 
 
 if __name__ == "__main__":

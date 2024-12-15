@@ -19,6 +19,8 @@ class Fraction:
             self.den : le denominateur
         """
         self.__num = num
+        if den == 0:
+            raise ValueError("denominator cannot be 0")
         self.__den = den
         self.simplify()
 
@@ -63,7 +65,7 @@ class Fraction:
 
     # ------------------ Operators overloading ------------------
 
-    def __add__(self, other: Fraction) -> Fraction :
+    def __add__(self, other) -> Fraction :
         """Overloading of the + operator for fractions
 
          PRE :
@@ -71,12 +73,14 @@ class Fraction:
          POST :
             renvoie la fraction résultante
          """
-        num = self.__num * other.denominator + other.numerator * self.__den
-        den = self.__den * other.denominator
-        new_frac = Fraction(num, den)
-        if new_frac.is_integer():
-            return num // den
-        return Fraction(num, den)
+        if type(other) == int:
+            return Fraction(self.__num + self.__den * other, self.__den)
+        elif type(other) == Fraction:
+            num = self.__num * other.denominator + other.numerator * self.__den
+            den = self.__den * other.denominator
+            return Fraction(num, den)
+        else:
+            raise TypeError("unsupported operand type")
 
     def __sub__(self, other):
         """Overloading of the - operator for fractions
@@ -86,11 +90,16 @@ class Fraction:
          POST :
             renvoie la fraction résultante
         """
-        num = self.__num * other.denominator - other.numerator * self.__den
-        den = self.__den * other.denominator
-        return Fraction(num, den)
+        if type(other) == int:
+            return Fraction(self.__num - self.__den * other, self.__den)
+        elif type(other) == Fraction:
+            num = self.__num * other.denominator - other.numerator * self.__den
+            den = self.__den * other.denominator
+            return Fraction(num, den)
+        else:
+            raise TypeError("unsupported operand type")
 
-    def __mul__(self, other: Fraction)-> Fraction:
+    def __mul__(self, other)-> Fraction:
         """Overloading of the * operator for fractions
 
         PRE :
@@ -98,9 +107,14 @@ class Fraction:
          POST :
             renvoie la fraction résultante
         """
-        num = self.__num * other.numerator
-        den = self.__den * other.denominator
-        return Fraction(num, den)
+        if type(other) == int:
+            return Fraction(self.__num * other, self.__den)
+        elif type(other) == Fraction:
+            num = self.__num * other.numerator
+            den = self.__den * other.denominator
+            return Fraction(num, den)
+        else:
+            raise TypeError("unsupported operand type")
 
     def __truediv__(self, other:Fraction)-> Fraction:
         """Overloading of the / operator for fractions
@@ -110,6 +124,8 @@ class Fraction:
          POST :
             renvoie la fraction résultante
         """
+        if other.numerator == 0:
+            raise ZeroDivisionError
         num = self.__num * other.denominator
         den = self.__den * other.numerator
         return Fraction(num, den)
@@ -120,6 +136,8 @@ class Fraction:
         PRE : other : un entier positif représentant la puissance
         POST : la fraction après
         """
+        if type(other) != int:
+            raise TypeError
         return Fraction(self.__num ** other, self.__den ** other)
 
     def __eq__(self, other: Fraction)-> bool:
