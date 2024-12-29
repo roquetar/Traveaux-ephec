@@ -15,6 +15,13 @@ class FractionTestCase(unittest.TestCase):
         with self.assertRaises(Exception, msg="Denominator cannot be zero"):
             Fraction(3, 0)
 
+    def test_setters(self):
+        f = Fraction(3, 4)
+        f.numerator = 5
+        self.assertEqual(f.numerator, 5, "Numerator should be 5")
+        f.denominator = 6
+        self.assertEqual(f.denominator, 6, "Denominator should be 6")
+
     def test_str(self):
         """Test string representation of a fraction."""
         f = Fraction(2, 4)
@@ -183,7 +190,13 @@ class FractionTestCase(unittest.TestCase):
         """Test if two fractions are adjacent."""
         f1 = Fraction(1, 3)
         f2 = Fraction(1, 4)
-        self.assertFalse(f1.is_adjacent_to(f2), "Fractions 1/3 and 1/4 should not be adjacent")
+        self.assertTrue(f1.is_adjacent_to(f2), "Fractions 1/3 and 1/4 should be adjacent")
+
+    def test_is_not_adjacent_to(self):
+        """Test if two fractions are not adjacent."""
+        f1 = Fraction(2, 3)
+        f2 = Fraction(1, 4)
+        self.assertFalse(f1.is_adjacent_to(f2), "Fractions 2/3 and 1/4 should not be adjacent")
 
     def test_simplify(self):
         """Test simplification of a fraction."""
@@ -195,6 +208,11 @@ class FractionTestCase(unittest.TestCase):
     def test_simplify_error(self):
         with self.assertRaises(ValueError, msg="Cannot simplify zero denominator"):
             Fraction(0, 0).simplify()
+
+    def test_simplify_negative(self):
+        f = Fraction(3, -5)
+        f.simplify()
+        self.assertEqual(f.numerator, -3, "Numerator should be -3 after simplification")
 
 
 if __name__ == "__main__":

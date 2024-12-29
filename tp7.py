@@ -259,15 +259,8 @@ class Fraction:
 
         POST : return True si les fractions sont adjacentes, False sinon
         """
-        self.simplify()
-        other.simplify()
-        if abs(self.__den) == abs(other.denominator):
-            return (abs(self.__num) + 1 == abs(other.numerator)) or (abs(self.numerator) == abs(other.numerator + 1))
-        elif self.__den % other.denominator == 0:
-            other.denominator *= self.__den // other.denominator
-        elif other.numerator % self.__den == 0:
-            self.__den *= other.numerator // self.__den
-        return False
+        diff = self - other
+        return abs(diff.numerator) == 1 and diff.denominator != 0
 
     def simplify(self):
         """
@@ -278,6 +271,7 @@ class Fraction:
         """
         if self.__den < 0:
             self.__num = -self.__num
+            self.__den = -self.__den
         pgcd = 1
         for i in range(2, max(self.__num, self.__den)//2+2):
             if self.__den % i == 0 and self.__num % i == 0:
@@ -285,3 +279,7 @@ class Fraction:
         self.__num //= pgcd
         self.__den //= pgcd
 
+
+f = Fraction(3, -5)
+f.simplify()
+print(f.numerator, f.denominator)
