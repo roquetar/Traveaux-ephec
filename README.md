@@ -34,3 +34,24 @@ Le programme est utilisé par des prompts avec:
 + s → supprimer un produit
 + i → liste des produits sous la forme d'un tableau (trié ou non)
 + q → quitter le programme (les données seront sauvegardées dans data.csv)
+
+## Descripiton des actions disponibles
+
+### Ajout d'un produit
+
+On peut rajouter un produit depuis l'interface avec 'a'<br>
+Le programme demande le nom du produit et la quantité via des prompts.  Ensuite il demande si le produit existe déjà dans la database<br>
+Si oui, il essaye de rajouter la quantité au produit existant et renvoie une erreur si le prodduit n'existe pas<br>
+Si non, le programme demande le prix unitaire ainsi que la catégorie grâce à des prompts et ensuite il le rajoute<br>
+
+### Supprimer un produit
+
+On peut supptimer un produit depuis l'interface avec 'b'<br>
+Le programme demande le nom du produit à supprimer<br>
+Si le produit existe, il le supprimme de la database, sinon il renvoie unmessage d'erreur
+
+### Information
+
+Le programme affiche un tableau (trié ou non) avec les infos demandées<br>
+Un prompt demande par quoi on veut trier (vide si aucun tri)<br>
+Un prompt demande les données à afficher (vide si tout afficher)
