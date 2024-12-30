@@ -118,7 +118,7 @@ class FractionTestCase(unittest.TestCase):
         self.assertTrue(f1 == f2, "Fractions should be equal")
 
     def test_equality_error(self):
-        with self.assertRaises(AttributeError, msg="Equality requires a Fraction"):
+        with self.assertRaises(TypeError, msg="Equality requires a Fraction"):
             Fraction(2, 3) == 1
 
     def test_inequality(self):

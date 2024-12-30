@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 class Fraction:
-    """Class representing a fraction and operations on it
-
-    Author : V. Van den Schrieck
-    Date : October 2021
+    """
+    Class representing a fraction and operations on it
     This class allows fraction manipulations through several operations.
     """
 
@@ -15,8 +13,8 @@ class Fraction:
             num : un entier correspondant au numérateur valant par défaut 0
             den : un entier non-nul correspondant au dénominateur valant par défaut 1
         POST :
-            self.num : le numerateur
-            self.den : le denominateur
+            Création d'un objet Fraction avec self.__num = num et self.__den = den
+            La fraction est ensuite simplifiée
         """
         self.__num = num
         if den == 0:
@@ -46,10 +44,9 @@ class Fraction:
     def __str__(self):
         """Return a textual representation of the reduced form of the fraction
 
-        PRE : ?
-        POST : ?
+        PRE : /
+        POST : return the fraction as string
         """
-        self.simplify()
         return str(self.__num) + "/" + str(self.__den)
 
     def as_mixed_number(self):
@@ -69,10 +66,18 @@ class Fraction:
         """Overloading of the + operator for fractions
 
          PRE :
-            other : la fraction additionneur
+            other : Must be an instance of the Fraction class.
          POST :
-            renvoie la fraction résultante
+            Returns a new Fraction instance representing the sum of the two fractions.
+            The resulting fraction is automatically simplified to its lowest terms.
+
+         Raises:
+            If `other` is an integer, return a new Fraction instance representing
+             the sum of the fraction and the integer
+            TypeError: If `other` is not an instance of Fraction or an integer.
          """
+
+
         if type(other) == int:
             return Fraction(self.__num + self.__den * other, self.__den)
         elif type(other) == Fraction:
@@ -85,11 +90,19 @@ class Fraction:
     def __sub__(self, other):
         """Overloading of the - operator for fractions
 
-        PRE :
-            other : la fraction soustracteurs
+         PRE :
+            other : Must be an instance of the Fraction class.
+                   If a non-Fraction type is provided, a TypeError is raised.
          POST :
-            renvoie la fraction résultante
-        """
+            Returns a new Fraction instance representing the difference between the two fractions.
+            The resulting fraction is automatically simplified to its lowest terms.
+
+         Raises:
+             If `other` is an integer, return a new Fraction instance representing
+             the difference of the fraction and the integer
+            TypeError: If `other` is not an instance of Fraction or integer.
+         """
+
         if type(other) == int:
             return Fraction(self.__num - self.__den * other, self.__den)
         elif type(other) == Fraction:
@@ -102,11 +115,19 @@ class Fraction:
     def __mul__(self, other)-> Fraction:
         """Overloading of the * operator for fractions
 
-        PRE :
-            other : la fraction multiplicateur
+         PRE :
+            other : Must be an instance of the Fraction class.
+                   If a non-Fraction type is provided, a TypeError is raised.
          POST :
-            renvoie la fraction résultante
-        """
+            Returns a new Fraction instance representing the product of the two fractions.
+            The resulting fraction is automatically simplified to its lowest terms.
+
+         Raises:
+             If `other` is an integer, return a new Fraction instance representing
+             the product of the fraction and the integer
+            TypeError: If `other` is not an instance of Fraction or integer.
+         """
+
         if type(other) == int:
             return Fraction(self.__num * other, self.__den)
         elif type(other) == Fraction:
@@ -119,11 +140,21 @@ class Fraction:
     def __truediv__(self, other:Fraction)-> Fraction:
         """Overloading of the / operator for fractions
 
-        PRE :
-            other : la fraction diviseur
+         PRE :
+            other : Must be an instance of the Fraction class.
+                   If a non-Fraction type is provided, a TypeError is raised.
+                   The numerator of `other` must not be zero.
          POST :
-            renvoie la fraction résultante
-        """
+            Returns a new Fraction instance representing the division of the current fraction by the other fraction.
+            The resulting fraction is automatically simplified to its lowest terms.
+
+         Raises:
+             If `other` is an integer, return a new Fraction instance representing
+             the division of the fraction and the integer
+            TypeError: If `other` is not an instance of Fraction or integer.
+            ZeroDivisionError: If the numerator of `other` is zero.
+         """
+
         if other.numerator == 0:
             raise ZeroDivisionError
         num = self.__num * other.denominator
@@ -133,78 +164,141 @@ class Fraction:
     def __pow__(self, other:int)-> Fraction:
         """Overloading of the ** operator for fractions
 
-        PRE : other : un entier positif représentant la puissance
-        POST : la fraction après
-        """
+         PRE :
+            other : Must be an integer. If a non-integer type is provided, a TypeError is raised.
+                   Must be a positive or negative integer.
+         POST :
+            Returns a new Fraction instance representing the fraction raised to the given power.
+            If `other` is positive, both the numerator and denominator are raised to the power.
+            If `other` is negative, the fraction is inverted, and then both numerator and denominator are raised to the absolute value of the power.
+            The resulting fraction is automatically simplified to its lowest terms.
+
+         Raises:
+            TypeError: If `other` is not an integer.
+         """
+
         if type(other) != int:
             raise TypeError
         return Fraction(self.__num ** other, self.__den ** other)
 
-    def __eq__(self, other: Fraction)-> bool:
+    def __eq__(self, other: Fraction) -> bool:
         """Overloading of the == operator for fractions
 
         PRE :
-            other : la fraction à comparer
-         POST :
-            renvoie True si la valeur est la même, False si non
+            other : Must be an instance of the Fraction class.
+                    If a non-Fraction type is provided, a TypeError is raised.
+        POST :
+            Returns True if the values of the two fractions are the same, False otherwise.
+
+        Raises:
+            TypeError: If `other` is not an instance of Fraction.
         """
+        if not isinstance(other, Fraction):
+            raise TypeError(f"Unsupported type for comparison: {type(other)}")
         return self.__num / self.__den == other.__num / other.__den
 
-    def __float__(self)-> float:
+    def __float__(self) -> float:
         """Returns the decimal value of the fraction
 
-        POST : renvoie le float de la fraction
+        POST :
+            Returns the float representation of the fraction.
         """
         return self.__num / self.__den
 
-    def __ne__(self, other: Fraction)-> bool:
+    def __ne__(self, other: Fraction) -> bool:
         """Overloading of the != operator for fractions
 
         PRE :
-            other : la fraction à comparer
-         POST :
-            renvoie True si la valeur est différente, False si non
+            other : Must be an instance of the Fraction class.
+                    If a non-Fraction type is provided, a TypeError is raised.
+        POST :
+            Returns True if the values of the two fractions are different, False otherwise.
+
+        Raises:
+            TypeError: If `other` is not an instance of Fraction.
         """
+        if not isinstance(other, Fraction):
+            raise TypeError(f"Unsupported type for comparison: {type(other)}")
         return not self == other
 
     def __round__(self, n: int = 0):
         """Return the rounded value of the fraction
 
-        PRE : n: a positive integer
-        POST : returns the rounded form of the fraction n number after the decimal point
+        PRE :
+            n : Must be a non-negative integer.
+                If `n` is not an integer or is negative, a ValueError is raised.
+        POST :
+            Returns the rounded form of the fraction to `n` decimal places.
+
+        Raises:
+            ValueError: If `n` is not a non-negative integer.
         """
+        if not isinstance(n, int) or n < 0:
+            raise ValueError(f"Invalid value for rounding: {n}. Must be a non-negative integer.")
         return round(self.__float__(), n)
 
     def __lt__(self, other):
         """Overloading of the < operator for fractions
 
-        PRE : other, another fraction
-        POST : return True if the fraction is lesser than other
+        PRE :
+            other : Must be an instance of the Fraction class or convertible to a float.
+                    If a non-Fraction or non-convertible type is provided, a TypeError is raised.
+        POST :
+            Returns True if the fraction is less than `other`, False otherwise.
+
+        Raises:
+            TypeError: If `other` is not a Fraction or not convertible to a float.
         """
+        if not isinstance(other, (Fraction, int, float)):
+            raise TypeError(f"Unsupported type for comparison: {type(other)}")
         return self.__float__() < float(other)
 
     def __le__(self, other):
         """Overloading of the <= operator for fractions
 
-        PRE : other, another fraction
-        POST : return True if the fraction is lesser than or equal to other
+        PRE :
+            other : Must be an instance of the Fraction class or convertible to a float.
+                    If a non-Fraction or non-convertible type is provided, a TypeError is raised.
+        POST :
+            Returns True if the fraction is less than or equal to `other`, False otherwise.
+
+        Raises:
+            TypeError: If `other` is not a Fraction or not convertible to a float.
         """
+        if not isinstance(other, (Fraction, int, float)):
+            raise TypeError(f"Unsupported type for comparison: {type(other)}")
         return self.__float__() <= float(other)
 
     def __gt__(self, other):
         """Overloading of the > operator for fractions
 
-        PRE : other, another fraction
-        POST : return True if the fraction is greater than other
+        PRE :
+            other : Must be an instance of the Fraction class or convertible to a float.
+                    If a non-Fraction or non-convertible type is provided, a TypeError is raised.
+        POST :
+            Returns True if the fraction is greater than `other`, False otherwise.
+
+        Raises:
+            TypeError: If `other` is not a Fraction or not convertible to a float.
         """
+        if not isinstance(other, (Fraction, int, float)):
+            raise TypeError(f"Unsupported type for comparison: {type(other)}")
         return self.__float__() > float(other)
 
     def __ge__(self, other):
         """Overloading of the >= operator for fractions
 
-        PRE : other, another fraction
-        POST : return True if the fraction is greater than or equal to other
+        PRE :
+            other : Must be an instance of the Fraction class or convertible to a float.
+                    If a non-Fraction or non-convertible type is provided, a TypeError is raised.
+        POST :
+            Returns True if the fraction is greater than or equal to `other`, False otherwise.
+
+        Raises:
+            TypeError: If `other` is not a Fraction or not convertible to a float.
         """
+        if not isinstance(other, (Fraction, int, float)):
+            raise TypeError(f"Unsupported type for comparison: {type(other)}")
         return self.__float__() >= float(other)
 
     def __int__(self):
@@ -280,6 +374,3 @@ class Fraction:
         self.__den //= pgcd
 
 
-f = Fraction(3, -5)
-f.simplify()
-print(f.numerator, f.denominator)
